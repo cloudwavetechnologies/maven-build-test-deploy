@@ -6,12 +6,12 @@ pipeline {
 
             steps {
                 withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn clean compile'
+                    sh 'mvn clean install'
                 }
             }
         }
 
-        stage ('Testing Stage') {
+    /*    stage ('Testing Stage') {
 
             steps {
                 withMaven(maven : 'maven_3_5_0') {
@@ -19,13 +19,14 @@ pipeline {
                 }
             }
         }
-
+*/
 
         stage ('Deployment Stage') {
             steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn deploy'
-                }
+
+                sh '/usr/local/bin/aws s3 cp target/jenkins-example*.jar s3://techprimers-s3/'
+                sh '/usr/local/bin/aws s3 ls'
+                sh '/usr/local/bin/aws s3 ls s3://techprimers-s3/'
             }
         }
     }
