@@ -1,31 +1,23 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'maven_3_5_0' // Ensure this matches your Jenkins tool config
+    }
+
     stages {
-        stage ('Compile Stage') {
-
+        stage('Build') {
             steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn clean compile'
+                withMaven(maven: 'maven_3_5_0') {
+                    sh 'mvn clean install'
                 }
             }
         }
 
-        stage ('Testing Stage') {
-
+        stage('Deploy to S3') {
             steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn deploy'
-                }
+                sh '/usr/local/bin/aws s3 cp target/supplychain-project-1.0-SNAPSHOT.jar s3://supplychain-s3-000/'
+                sh '/usr/local/bin/aws s3 ls s3://supplychain-s3-000/'
             }
         }
     }
