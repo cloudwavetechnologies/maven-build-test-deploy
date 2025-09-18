@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven_3_5_0' // Ensure this matches your Jenkins tool config
+        maven 'mvn' // Updated tool name
     }
 
     stages {
         stage('Build') {
             steps {
-                withMaven(maven: 'maven_3_5_0') {
+                withMaven(maven: 'mvn') {
                     sh 'mvn clean install'
                 }
             }
