@@ -2,14 +2,15 @@ pipeline {
     agent any
 
     tools {
-        maven 'mvn' // Updated tool name
+        maven 'mvn' // This matches your updated tool name
     }
 
     stages {
         stage('Build') {
             steps {
-                withMaven(maven: 'mvn') {
-                    sh 'mvn clean install'
+                script {
+                    def mvnHome = tool 'mvn'
+                    sh "${mvnHome}/bin/mvn clean install"
                 }
             }
         }
